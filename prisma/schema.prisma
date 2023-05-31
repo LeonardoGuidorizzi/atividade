@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model alocacao {
+  id              Int             @id @default(autoincrement()) @db.UnsignedInt
+  area            Int
+  automovel       Int             @db.UnsignedInt
+  concessionaria  Int             @db.UnsignedInt
+  quantidade      Int
+  automoveis      automoveis      @relation(fields: [automovel], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alocacao_ibfk_1")
+  concessionarias concessionarias @relation(fields: [concessionaria], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "alocacao_ibfk_2")
+
+  @@index([automovel], map: "automovel")
+  @@index([concessionaria], map: "concessionaria")
+}
+
+model automoveis {
+  id       Int        @id @default(autoincrement()) @db.UnsignedInt
+  modelo   String     @db.VarChar(100)
+  preco    String     @db.VarChar(50)
+  alocacao alocacao[]
+}
+
+model clientes {
+  id   Int    @id @default(autoincrement()) @db.UnsignedInt
+  nome String @db.VarChar(500)
+}
+
+model concessionarias {
+  id             Int        @id @default(autoincrement()) @db.UnsignedInt
+  concessionaria String     @db.VarChar(100)
+  alocacao       alocacao[]
+}
