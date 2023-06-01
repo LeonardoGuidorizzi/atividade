@@ -1,3 +1,0 @@
-const getallClients = () =>{
-    let JsonClients = {}
-}
